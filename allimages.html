@@ -21,27 +21,75 @@
     <div id="images"></div>
 
     <script>
-        // Fetch the directory listing (requires your server to expose directory index)
-        fetch('./ci2png/')
-            .then(res => res.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .map(a => a.getAttribute('href'))
-                    .filter(href => href && href.endsWith('.png'));
-
-                const container = document.getElementById('images');
-                links.forEach(name => {
-                    const img = document.createElement('img');
-                    img.src = `ci2png/${name}`;
-                    container.appendChild(img);
-                });
-            })
-            .catch(err => {
-                console.error('Could not load directory listing:', err);
-                // Fallback: manually list images if needed
-            });
+        urls = [
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/9.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/27.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/31.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/36.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/42.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/51.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/53.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/64.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/65.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/81.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/98.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/109.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/118.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/127.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/134.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/145.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/164.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/178.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/184.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/202.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/240.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/243.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/250.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/281.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/284.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/293.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/297.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/304.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/313.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/324.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b9.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b27.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b31.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b36.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b42.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b51.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b53.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b64.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b65.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b81.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b98.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b109.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b118.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b127.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b134.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b145.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b164.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b178.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b184.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b202.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b240.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b243.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b250.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b281.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b284.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b293.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b297.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b304.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b313.png',
+'https://Squarerootofpi.github.io/r-ci-images-pub/ci2png/b324.png',
+        ];
+        // Render images from the `urls` array
+        const container = document.getElementById('images');
+        urls.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            container.appendChild(img);
+        });
     </script>
 </body>
 </html>
