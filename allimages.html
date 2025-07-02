@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All CI2PNG Images</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: sans-serif;
+        }
+        img {
+            display: block;
+            margin-bottom: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>CI2PNG Images</h1>
+    <div id="images"></div>
+
+    <script>
+        // Fetch the directory listing (requires your server to expose directory index)
+        fetch('./ci2png/')
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.getAttribute('href'))
+                    .filter(href => href && href.endsWith('.png'));
+
+                const container = document.getElementById('images');
+                links.forEach(name => {
+                    const img = document.createElement('img');
+                    img.src = `ci2png/${name}`;
+                    container.appendChild(img);
+                });
+            })
+            .catch(err => {
+                console.error('Could not load directory listing:', err);
+                // Fallback: manually list images if needed
+            });
+    </script>
+</body>
+</html>
